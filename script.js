@@ -1,4 +1,4 @@
-// Wczytaj dane gościa na podstawie kodu z URL
+// Fetch guest data based on the URL parameter (QR code)
 const urlParams = new URLSearchParams(window.location.search);
 const guestCode = urlParams.get('code');
 
@@ -15,9 +15,10 @@ fetch('guests.json')
       guestInfo.innerHTML = `<p>Witaj, ${guest.name}!</p>`;
       rsvpForm.style.display = 'block';
 
+      // Display attendance options
       if (guest.isCouple) {
         coupleOptions.style.display = 'block';
-        const names = guest.name.split(' i '); // Podziel imiona pary
+        const names = guest.name.split(' i '); // Split names if it's a couple
         coupleOptions.querySelectorAll('label').forEach((label, index) => {
           label.querySelector('input').name = `guest${index + 1}`;
           label.querySelector('input').value = names[index];
@@ -31,7 +32,7 @@ fetch('guests.json')
     }
   });
 
-// Obsługa wysyłania formularza
+// Handle form submission and save response
 document.getElementById('rsvpForm').addEventListener('submit', function(event) {
   event.preventDefault();
 
@@ -46,10 +47,24 @@ document.getElementById('rsvpForm').addEventListener('submit', function(event) {
     attendance.push(...coupleAttendance);
   }
 
-  const responseElement = document.getElementById('response');
-  if (attendance.length > 0) {
-    responseElement.innerHTML = `<p>Dziękujemy za potwierdzenie! Obecni: ${attendance.join(', ')}</p>`;
-  } else {
-    responseElement.innerHTML = `<p>Dziękujemy za informację! Nikt z Państwa nie będzie obecny.</p>`;
-  }
+  // Post the response to the server
+  fetch('/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: guestCode,  // Send the guest code to identify the response
+      attendance: attendance,
+    })
+  })
+  .then(response => response.text())
+  .then(message => {
+    const responseElement = document.getElementById('response');
+    responseElement.innerHTML = `<p>${message}</p>`;
+  })
+  .catch(error => {
+    console.error('Error submitting RSVP:', error);
+    alert('Wystąpił błąd. Spróbuj ponownie.');
+  });
 });

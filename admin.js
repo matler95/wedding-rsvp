@@ -1,8 +1,9 @@
-fetch('responses.json')
+// Fetch the responses to display in the table
+fetch('/responses')
   .then(response => response.json())
   .then(data => {
     const tableBody = document.querySelector('#responsesTable tbody');
-    tableBody.innerHTML = ''; // Wyczyść wstępny wiersz
+    tableBody.innerHTML = ''; // Clear any existing rows
 
     if (data.length === 0) {
       tableBody.innerHTML = '<tr><td colspan="3">Brak odpowiedzi</td></tr>';
