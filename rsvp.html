@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Potwierdzenie obecności</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Potwierdź swoją obecność</h1>
+  <div id="guestInfo">
+    <p>Wczytuję dane gościa...</p>
+  </div>
+  <form id="rsvpForm" style="display: none;">
+    <div id="individualOptions" style="display: none;">
+      <p>Czy potwierdzasz swoją obecność?</p>
+      <label>
+        <input type="radio" name="attendance" value="yes" required> Tak
+      </label>
+      <label>
+        <input type="radio" name="attendance" value="no"> Nie
+      </label>
+    </div>
+    <div id="coupleOptions" style="display: none;">
+      <p>Kto potwierdza swoją obecność?</p>
+      <label>
+        <input type="checkbox" name="guest1" value="yes"> Michał Rosłon
+      </label>
+      <label>
+        <input type="checkbox" name="guest2" value="yes"> Marta Sikorska
+      </label>
+    </div>
+    <button type="submit">Wyślij</button>
+  </form>
+  <p id="response"></p>
+  <script src="script.js"></script>
+</body>
+</html>
